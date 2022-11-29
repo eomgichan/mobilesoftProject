@@ -1,58 +1,57 @@
-import { StyleSheet, Text, View, Image } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator} from '@react-navigation/stack';
-import Home from './Screens/Home';
-import User from './Screens/User';
-import Signup from './Screens/Signup';
-import LogoTitle from './Components/LogoTitle';
+import { StyleSheet, ScrollView, View, Button, Text} from 'react-native';
+import { useState } from 'react';
+import { TextInput } from 'react-native-gesture-handler';
 
-const Stack = createStackNavigator();
 export default function App() {
+  const [myTextInput,setMyTextInput] = useState ("")
+  const [alphabet,setAlphabet] = useState (['a','b','c','d'])
+  const onChangeInput = (event) =>{
+    console.log("event",event)
+    setMyTextInput(event)
+  }
+  const onAddTextInput = () =>{
+    setAlphabet([...alphabet,myTextInput])
+  }
   return (
-    <NavigationContainer>
-      <Stack.Navigator 
-      initialRouteName='Signup'
-      screenOptions ={{
-          headerStyle:{
-            backgroundColor:'green'
-          },
-          headerTintColor:'white',
-          headerTitleStyle:{
-            fontWeight:'bold',
-            color:'black'
-          }
-      }}>
-        <Stack.Screen name="Singup" component={Signup}/>
-        <Stack.Screen name = "Home" component={Home} 
-        options = {{title:'Home Screen',
-          headerTitle:LogoTitle}}/>
-        <Stack.Screen name = "User" component={User}
-          initialParams={{
-            userIdx:50,
-            userName:'Samual',
-            userLastName:'Song'
-          }}
-          options = {{title:'User Screen',
-          headerStyle:{
-            backgroundColor:'green'
-          },
-          haederTintColor:'red',
-          headerTitleStyle:{
-            fontWeight:'bold',
-            color:'purple'
-          }
-        }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+    <View>
+      <TextInput
+        style={StyleSheet.input}
+        value={myTextInput}
+        onChangeText={onChangeInput}
+        multiline={true}
+        editable={true}
+        ></TextInput>
+        <Button title = "Add Text Input"
+        onPress={onAddTextInput}></Button>
+        <ScrollView style = {{width:"100%"}}>
+          {alphabet.map((item,idx)=>(
+            <Text
+              style={StyleSheet.mainText}
+            >{item}</Text>
+          ))}
+        </ScrollView>
+    </View>
+  )
+  const styles = StyleSheet.create({
+    mainView: {
+      flex: 1,
+      height: "100%",
+      marginTop:50,
+      alignItems:'center',
+      justifyContent:'center'
+    },
+    input:{
+      width:"100%",
+      backgroundColor:'#cecece',
+      fontSize:25,
+      padding:10
+    },
+    mainText:{
+      fontSize:20,
+      color:"red",
+      padding:20,
+      margin:20,
+      backgroundColor:'pink'
+    }
+  });
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
